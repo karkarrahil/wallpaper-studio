@@ -1,0 +1,60 @@
+@import "tailwindcss";
+/* @config "../tailwind.config.js"; */
+
+
+.masonry-grid {
+    columns: 4;
+    column-gap: 1.5rem;
+}
+
+@media (max-width: 1280px) {
+    .masonry-grid {
+        columns: 3;
+    }
+}
+
+@media (max-width: 1024px) {
+    .masonry-grid {
+        columns: 2;
+    }
+}
+
+.masonry-item {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.glass-effect {
+    background: rgba(16, 34, 28, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(19, 236, 164, 0.1);
+}
+
+.image-card-overlay {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: linear-gradient(to top, rgba(16, 34, 28, 0.9) 0%, rgba(16, 34, 28, 0) 50%);
+}
+
+.masonry-item:hover .image-card-overlay {
+    opacity: 1;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #10221c;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #13eca422;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #13eca444;
+}
