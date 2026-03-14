@@ -1,4 +1,5 @@
 
+import { UserAvatar, UserButton, UserProfile } from '@clerk/clerk-react';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -16,16 +17,16 @@ const Navbar: React.FC = () => {
             </div>
             <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">WallVibe</span>
           </Link>
-          
+
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className={`${isActive('/') ? 'text-primary underline underline-offset-8 decoration-2' : 'text-slate-500 hover:text-primary'} transition-colors`}
             >
               Discover
             </Link>
-            <Link 
-              to="/favorites" 
+            <Link
+              to="/favorites"
               className={`${isActive('/favorites') ? 'text-primary underline underline-offset-8 decoration-2' : 'text-slate-500 hover:text-primary'} transition-colors`}
             >
               Favorites
@@ -37,24 +38,28 @@ const Navbar: React.FC = () => {
         <div className="flex items-center gap-4">
           <div className="relative group hidden lg:block">
             <span className="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-            <input 
-              type="text" 
-              placeholder="Search wallpapers..." 
+            <input
+              type="text"
+              placeholder="Search wallpapers..."
               className="bg-slate-200 dark:bg-card-dark border-none rounded-full py-2 pl-10 pr-4 text-sm w-64 focus:ring-2 focus:ring-primary/50 transition-all text-slate-900 dark:text-white"
             />
           </div>
-          
+
           <button className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-card-dark transition-colors text-slate-500">
             <span className="material-icons-round">notifications</span>
           </button>
-          
-          <Link to="/auth" className="w-8 h-8 rounded-full overflow-hidden border-2 border-primary ring-2 ring-primary/20">
-            <img 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRbadG3SrGP7L_NmjzVHMttpWHjuV6qR_A50kj2myZQacD4biOnH-IDx6JbCmN2E__BidyWIWHmgu9i9BQXv6dJLa51Jmpy1PJrdafHbaBzUNTUFSO38Xa0TAdS63K6PiIigcrKtnr0mi80YijOAqdCrmEzB6xwKkYm5rQELvHMQTnBPEL_0GdyaKQyhFmWpdW3z6HEIYa6noDcY4TZU14Itn3r3rnT1YtRSoTTq3eugaRnJPSmxAV2mlMvvsQzaVRmSWsqP-_xRE" 
-              alt="User profile" 
-              className="w-full h-full object-cover"
-            />
-          </Link>
+
+          <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-primary ring-2 ring-primary/20">
+            <UserButton>
+
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRbadG3SrGP7L_NmjzVHMttpWHjuV6qR_A50kj2myZQacD4biOnH-IDx6JbCmN2E__BidyWIWHmgu9i9BQXv6dJLa51Jmpy1PJrdafHbaBzUNTUFSO38Xa0TAdS63K6PiIigcrKtnr0mi80YijOAqdCrmEzB6xwKkYm5rQELvHMQTnBPEL_0GdyaKQyhFmWpdW3z6HEIYa6noDcY4TZU14Itn3r3rnT1YtRSoTTq3eugaRnJPSmxAV2mlMvvsQzaVRmSWsqP-_xRE"
+                alt="User profile"
+                className="w-full h-full object-cover"
+              />
+
+            </UserButton>
+          </div>
         </div>
       </div>
     </nav>

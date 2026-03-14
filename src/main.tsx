@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { ClerkProvider } from '@clerk/clerk-react'
+import { Provider } from 'react-redux'
+import { store } from './store/store.ts'
 
 
 // Import your Publishable Key
@@ -16,7 +18,9 @@ if (!PUBLISHABLE_KEY) {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </ClerkProvider>
   </StrictMode>,
 )
