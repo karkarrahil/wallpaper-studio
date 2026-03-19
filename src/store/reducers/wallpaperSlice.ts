@@ -2,12 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_KEY;
-console.log("🚀 ~ UNSPLASH_ACCESS_KEY:", UNSPLASH_ACCESS_KEY)
 
 // create async thunk for fetching wallpapers from unsplash api using axios
 export const fetchWallpapers = createAsyncThunk(
   "fetchWallpapers",
-  async (query: string, thunkAPI) => {
+  async (
+    { query, per_page }: { query: string; per_page?: number },
+    thunkAPI,
+  ) => {
     try {
       const response = await axios.get(
         "https://api.unsplash.com/search/photos",
@@ -15,6 +17,8 @@ export const fetchWallpapers = createAsyncThunk(
           params: {
             query,
             client_id: UNSPLASH_ACCESS_KEY,
+            page: 1,
+            per_page,
           },
         },
       );
