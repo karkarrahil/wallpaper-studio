@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { fetchWallpapers } from "../store/reducers/wallpaperSlice";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch } from "../store/store";
+import type { AppDispatch, RootState } from "../store/store";
 import Card from "./Card";
+import SearchBar from "./SearchBar";
 
 const CATEGORIES = [
   "Trending",
@@ -15,38 +16,61 @@ const CATEGORIES = [
 
 const Hero: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+
   const [photoQuery, setPhotoQuery] = useState("trending");
-  const wallpapers = useSelector((state) => state.wallpaper.wallpapers);
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1); // ✅ pagination added
 
+  const wallpapers = useSelector(
+    (state: RootState) => state.wallpaper.wallpapers
+  );
+  const loading = useSelector(
+    (state: RootState) => state.wallpaper.loading
+  );
+
+  // ✅ Fetch wallpapers when query or page changes
   useEffect(() => {
-    dispatch(fetchWallpapers({ query: photoQuery, per_page: 14 }));
-  }, [photoQuery, dispatch]);
-
-  const handleCategoryClick = (query: string) => {
-    setPhotoQuery(query);
-  };
-
-  const handleMoreClick = () => {
     dispatch(
-      fetchWallpapers({ query: photoQuery, per_page: wallpapers.length + 14 }),
+      fetchWallpapers({
+        query: photoQuery,
+        per_page: wallpapers.length + 14,
+        page: page, // ✅ proper pagination
+      })
     );
+  }, [photoQuery, page, dispatch]);
+
+  // ✅ Handle typing in search bar
+  const handleSearchTermChange = (value: string) => {
+    setSearchTerm(value);
   };
 
-  const handleSearch = () => {
-    if (searchTerm.trim() !== "") {
-      setPhotoQuery(searchTerm);
-    } else {
-      setPhotoQuery("trending");
-    }
-    console.log("Search Term:", searchTerm);
-  }
+  // ✅ Handle category click
+  const handleCategoryClick = (query: string) => {
+    const normalized = query.toLowerCase();
+    setSearchTerm(query);
+    setPhotoQuery(normalized);
+    setPage(1); // ✅ reset pagination
+  };
+
+  // ✅ Load more (pagination)
+  const handleMoreClick = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  // ✅ Handle search submit
+  const handleSearch = (query: string) => {
+    const searchValue = query.trim().toLowerCase() || "trending";
+    setSearchTerm(searchValue);
+    setPhotoQuery(searchValue);
+    setPage(1); // ✅ reset pagination
+  };
+
   return (
     <div className="max-w-400 mx-auto px-6 py-10">
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center mb-16 space-y-8 text-center">
         <div className="max-w-2xl space-y-4">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-emerald-400 to-teal-500">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-primary via-emerald-400 to-teal-500">
             Find your next aesthetic.
           </h1>
 
@@ -56,31 +80,14 @@ const Hero: React.FC = () => {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="w-full max-w-3xl relative">
-          <span className="material-icons-round absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 text-2xl">
-            search
-          </span>
+        {/* ✅ Search Bar */}
+        <SearchBar
+          value={searchTerm}
+          onSearch={handleSearch}
+          onChange={handleSearchTermChange}
+        />
 
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
-            className="w-full bg-slate-200/50 dark:bg-slate-900/40 border border-slate-300 dark:border-slate-800 focus:border-primary focus:ring-1 focus:ring-primary rounded-2xl py-5 pl-14 pr-16 text-lg outline-none transition-all placeholder:text-slate-500"
-            placeholder="Search for 4K backgrounds, nature, cyberpunk..."
-          />
-
-          <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-background-dark transition-all">
-            <span className="material-icons-round">auto_awesome</span>
-          </button>
-        </div>
-
-        {/* Categories */}
+        {/* ✅ Categories */}
         <div className="flex flex-wrap justify-center gap-3">
           {CATEGORIES.map((cat) => (
             <button
@@ -94,9 +101,10 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      <Card wallpapers={wallpapers} />
+      {/* ✅ Wallpapers */}
+      <Card wallpapers={wallpapers} loading={loading} />
 
-      {/* Discover Button */}
+      {/* ✅ Discover More */}
       <div className="mt-16 flex justify-center">
         <button
           onClick={handleMoreClick}
